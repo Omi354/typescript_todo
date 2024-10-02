@@ -15,10 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const registerBtn = getElementById("register");
   registerBtn.addEventListener("click", () => {
     // 新しいTODOをDOMから取得してTodoリストに追加する
-    todoList = [...todoList, getNewTodo()];
-    // TODO一覧を表示する
-    removeTodoListElement();
-    appendTodoList(todoList, filterWord, deleteTodo);
+    const newTodo = getNewTodo();
+    if (newTodo) {
+      todoList = [...todoList, newTodo];
+      // TODO一覧を表示する
+      removeTodoListElement();
+      appendTodoList(todoList, filterWord, deleteTodo);
+    }
   });
 
   // 絞り込み入力時の処理

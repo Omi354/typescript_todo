@@ -18,12 +18,25 @@ export type Todo = {
  * DOMのinput要素から新しいTODOの値を取得する
  * @returns Todo
  */
-export const getNewTodo = (): Todo => ({
-  id: Date.now(),
-  name: getInputElementById("new-todo-name").value,
-  person: getInputElementById("new-person").value,
-  deadline: getInputElementById("new-deadline").value,
-});
+export const getNewTodo = (): Todo | null => {
+  const newName = getInputElementById("new-todo-name").value;
+  const newPerson = getInputElementById("new-person").value;
+  const newDeadline = getInputElementById("new-deadline").value;
+
+  if (newName === "" || newPerson === "" || newDeadline === "") {
+    window.alert("未入力の項目があります");
+    return null;
+  }
+
+  const todo: Todo = {
+    id: Date.now(),
+    name: newName,
+    person: newPerson,
+    deadline: newDeadline,
+  };
+
+  return todo;
+};
 
 /**
  * DOMにTodo一覧を表示する
