@@ -84,3 +84,24 @@ export const removeTodoListElement = () => {
     tBody.removeChild(tBody.firstChild);
   }
 };
+
+/**
+ * 期限を昇順、降順に並べ替える
+ */
+export const sortTodoList = (todoList: Todo[], sortHelper: boolean) => {
+  // ボタンを押すたびにtrueとfalseを逆にできるように変数を定義
+  let sortedTodoList: Todo[] = [];
+
+  // 変数がtrueの場合とfalseの場合で逆順に並べ替え
+  if (sortHelper) {
+    sortedTodoList = [...todoList].sort((a, b) => {
+      return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+    });
+  } else {
+    sortedTodoList = [...todoList].sort((a, b) => {
+      return new Date(b.deadline).getTime() - new Date(a.deadline).getTime();
+    });
+  }
+
+  return sortedTodoList;
+};

@@ -3,6 +3,7 @@ import {
   appendTodoList,
   getNewTodo,
   removeTodoListElement,
+  sortTodoList,
   Todo,
 } from "./todo";
 import { getElementById, getInputElementById } from "./utils/dom";
@@ -31,6 +32,17 @@ document.addEventListener("DOMContentLoaded", () => {
     filterWord = filterInput.value;
     removeTodoListElement();
     appendTodoList(todoList, filterWord, deleteTodo);
+  });
+
+  const sortElem = getElementById("sort");
+  let sortHelper = true;
+  sortElem.addEventListener("click", () => {
+    // 配列の中身を並べ替えて、新しい配列を作成
+    const sortedTodoList = sortTodoList(todoList, sortHelper);
+    // 並べ替えたTodoListを再表示
+    removeTodoListElement();
+    appendTodoList(sortedTodoList, filterWord, deleteTodo);
+    sortHelper = !sortHelper;
   });
 });
 
