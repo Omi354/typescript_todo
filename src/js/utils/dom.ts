@@ -40,3 +40,12 @@ export const createElement = (
   }
   return element;
 };
+
+/**
+ * インプットタグを生成する
+ * @returns HTMLinputElement
+ */
+export const createInputElement = (): HTMLInputElement => {
+  const inputElement = document.createElement("input");
+  return inputElement;
+};

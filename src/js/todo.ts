@@ -1,5 +1,6 @@
 import {
   createElement,
+  createInputElement,
   getElementById,
   getInputElementById,
 } from "./utils/dom";
@@ -46,6 +47,7 @@ export const appendTodoList = (
   todoList: Todo[],
   _filterWord: string,
   deleteTodo: (id: number) => void,
+  updateTodo: (id: number) => void,
 ) => {
   todoList
     .filter(
@@ -58,17 +60,60 @@ export const appendTodoList = (
       const deadlineTd = createElement("td", todo.deadline);
 
       // 削除ボタン
-      const deleteBtnTd = createElement("td");
+      const handleBtnTd = createElement("td");
       const deleteBtn = createElement("button", "削除");
+      const editBtn = createElement("button", "編集");
+      const updateBtn = createElement("button", "更新");
+      updateBtn.style.display = "none";
       deleteBtn.addEventListener("click", () => deleteTodo(todo.id));
+
+      editBtn.addEventListener("click", () => {
+        // 編集ボタン押下後、インプットタグを表示
+
+        // 要素の生成と命名
+        const nameInputElem = createInputElement();
+        nameInputElem.id = `${todo.id}inputName`;
+        const personInputElem = createInputElement();
+        personInputElem.id = `${todo.id}inputPerson`;
+        const deadlineInputElem = createInputElement();
+        deadlineInputElem.id = `${todo.id}inputDeadline`;
+
+        // 該当の配列を取得
+        const editedObj = todoList.find(
+          (_todo) => _todo.id === todo.id,
+        ) as Todo;
+
+        // 該当の配列にアクセスし、inputタグに現在の値を代入
+        nameInputElem.value = editedObj.name;
+        personInputElem.value = editedObj.person;
+        deadlineInputElem.value = editedObj.deadline;
+
+        // 元のtdのテキストを非表示
+        nameTd.textContent = "";
+        personTd.textContent = "";
+        deadlineTd.textContent = "";
+
+        // インプットタグを表示
+        nameTd.appendChild(nameInputElem);
+        personTd.appendChild(personInputElem);
+        deadlineTd.appendChild(deadlineInputElem);
+
+        // 編集ボタンを消し、更新ボタンを表示
+        editBtn.style.display = "none";
+        updateBtn.style.display = "inline-block";
+      });
+
+      updateBtn.addEventListener("click", () => updateTodo(todo.id));
 
       const tr = createElement("tr");
 
-      deleteBtnTd.appendChild(deleteBtn);
+      handleBtnTd.appendChild(deleteBtn);
+      handleBtnTd.appendChild(editBtn);
+      handleBtnTd.appendChild(updateBtn);
       tr.appendChild(nameTd);
       tr.appendChild(personTd);
       tr.appendChild(deadlineTd);
-      tr.appendChild(deleteBtnTd);
+      tr.appendChild(handleBtnTd);
 
       const tBody = getElementById("todo-list");
       tBody.appendChild(tr);

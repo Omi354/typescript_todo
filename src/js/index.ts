@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
       todoList = [...todoList, newTodo];
       // TODO一覧を表示する
       removeTodoListElement();
-      appendTodoList(todoList, filterWord, deleteTodo);
+      appendTodoList(todoList, filterWord, deleteTodo, updateTodo);
     }
   });
 
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
   filterInput.addEventListener("input", () => {
     filterWord = filterInput.value;
     removeTodoListElement();
-    appendTodoList(todoList, filterWord, deleteTodo);
+    appendTodoList(todoList, filterWord, deleteTodo, updateTodo);
   });
 
   const sortElem = getElementById("sort");
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const sortedTodoList = sortTodoList(todoList, sortHelper);
     // 並べ替えたTodoListを再表示
     removeTodoListElement();
-    appendTodoList(sortedTodoList, filterWord, deleteTodo);
+    appendTodoList(sortedTodoList, filterWord, deleteTodo, updateTodo);
     sortHelper = !sortHelper;
   });
 });
@@ -53,5 +53,26 @@ document.addEventListener("DOMContentLoaded", () => {
 const deleteTodo = (id: number) => {
   todoList = todoList.filter((todo) => todo.id !== id);
   removeTodoListElement();
-  appendTodoList(todoList, filterWord, deleteTodo);
+  appendTodoList(todoList, filterWord, deleteTodo, updateTodo);
+};
+
+const updateTodo = (id: number) => {
+  // idを元にindexを取得
+  const index = todoList.findIndex((_todo) => _todo.id === id);
+
+  // input要素のidからinputタグのvalueを取得
+  const nameInputElem = getInputElementById(`${id}inputName`);
+  const editedName = nameInputElem.value;
+  const personInputElem = getInputElementById(`${id}inputPerson`);
+  const editedPerson = personInputElem.value;
+  const deadlineInputElem = getInputElementById(`${id}inputDeadline`);
+  const editedDeadline = deadlineInputElem.value;
+
+  // todoList配列にアクセスして内容を書き換える
+  todoList[index].name = editedName;
+  todoList[index].person = editedPerson;
+  todoList[index].deadline = editedDeadline;
+
+  removeTodoListElement();
+  appendTodoList(todoList, filterWord, deleteTodo, updateTodo);
 };
